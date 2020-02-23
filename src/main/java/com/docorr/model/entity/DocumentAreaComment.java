@@ -2,8 +2,6 @@ package com.docorr.model.entity;
 
 import io.leangen.graphql.annotations.GraphQLQuery;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -12,31 +10,24 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import org.hibernate.annotations.Type;
 
 /**
  *
  * @author MW
  */
 @Entity
-@Table(name = "tb_document")
-public class Document {
+@Table(name = "tb_document_area_comment")
+public class DocumentAreaComment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @GraphQLQuery(name = "id")
     private Long id;
 
-    @Column(name = "title", length = 255)
-    @GraphQLQuery(name = "title")
-    private String title;
-
-    @Column(name = "content")
-    @Type(type = "text")
-    @GraphQLQuery(name = "content")
-    private String content;
+    @Column(name = "comment", length = 1000, nullable = false)
+    @GraphQLQuery(name = "comment")
+    private String comment;
 
     @Column(name = "create_date")
     @GraphQLQuery(name = "createDate")
@@ -46,8 +37,13 @@ public class Document {
     @GraphQLQuery(name = "updateDate")
     private LocalDateTime updateDate = LocalDateTime.now();
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "document")
-    private List<DocumentArea> documentAreas = new ArrayList<>();
+    @Column(name = "document_area_id", insertable = false, updatable = false)
+    @GraphQLQuery(name = "documentAreaId")
+    private Long documentAreaId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "document_area_id", nullable = false)
+    private DocumentArea documentArea;
 
     @GraphQLQuery(name = "user")
     @ManyToOne(fetch = FetchType.LAZY)
@@ -62,20 +58,12 @@ public class Document {
         this.id = id;
     }
 
-    public String getTitle() {
-        return title;
+    public String getComment() {
+        return comment;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
     public LocalDateTime getCreateDate() {
@@ -94,12 +82,20 @@ public class Document {
         this.updateDate = updateDate;
     }
 
-    public List<DocumentArea> getDocumentAreas() {
-        return documentAreas;
+    public Long getDocumentAreaId() {
+        return documentAreaId;
     }
 
-    public void setDocumentAreas(List<DocumentArea> documentAreas) {
-        this.documentAreas = documentAreas;
+    public void setDocumentAreaId(Long documentAreaId) {
+        this.documentAreaId = documentAreaId;
+    }
+
+    public DocumentArea getDocumentArea() {
+        return documentArea;
+    }
+
+    public void setDocumentArea(DocumentArea documentArea) {
+        this.documentArea = documentArea;
     }
 
     public User getUser() {

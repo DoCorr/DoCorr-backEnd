@@ -18,4 +18,4 @@ graphql:
       enabled: true
 
 bamdule.logging.dir : D://logs/spring-boot-log/bamdule
-bamdule.logging.level : DEBUG
+bamdule.logging.level : INFO

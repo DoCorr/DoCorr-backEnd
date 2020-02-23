@@ -3,6 +3,7 @@ package com.docorr.service.impl;
 import com.docorr.dao.DocumentDao;
 import com.docorr.model.entity.Document;
 import com.docorr.service.DocumentService;
+import io.leangen.graphql.annotations.GraphQLArgument;
 import io.leangen.graphql.annotations.GraphQLMutation;
 import io.leangen.graphql.annotations.GraphQLQuery;
 import io.leangen.graphql.spqr.spring.annotations.GraphQLApi;
@@ -36,9 +37,10 @@ public class DocumentServiceImpl implements DocumentService {
     public Document getDocumentById(Long id) {
         return documentDao.findById(id).orElse(null);
     }
+    
     @GraphQLMutation(name = "saveDocument")
     @Override
-    public Document saveDocument(Document document) {
+    public Document saveDocument(@GraphQLArgument(name = "document") Document document) {
         return documentDao.save(document);
     }
 

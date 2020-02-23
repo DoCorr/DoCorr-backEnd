@@ -14,43 +14,36 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import org.hibernate.annotations.Type;
 
 /**
  *
  * @author MW
  */
 @Entity
-@Table(name = "tb_document")
-public class Document {
+@Table(name = "tb_document_area")
+public class DocumentArea {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @GraphQLQuery(name = "id")
     private Long id;
 
-    @Column(name = "title", length = 255)
-    @GraphQLQuery(name = "title")
-    private String title;
-
-    @Column(name = "content")
-    @Type(type = "text")
-    @GraphQLQuery(name = "content")
-    private String content;
-
     @Column(name = "create_date")
     @GraphQLQuery(name = "createDate")
     private LocalDateTime createDate;
 
-    @Column(name = "update_date")
-    @GraphQLQuery(name = "updateDate")
-    private LocalDateTime updateDate = LocalDateTime.now();
+//    @Column(name = "doc_id", insertable = false, updatable = false, nullable = false)
+//    private Long docId;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "document")
-    private List<DocumentArea> documentAreas = new ArrayList<>();
-
-    @GraphQLQuery(name = "user")
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "doc_id", nullable = false)
+    private Document document;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "documentArea")
+    private List<DocumentAreaComment> documentAreaComments = new ArrayList<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @GraphQLQuery(name = "user")
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
@@ -62,20 +55,20 @@ public class Document {
         this.id = id;
     }
 
-    public String getTitle() {
-        return title;
+//    public Long getDocId() {
+//        return docId;
+//    }
+//
+//    public void setDocId(Long docId) {
+//        this.docId = docId;
+//    }
+
+    public Document getDocument() {
+        return document;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
+    public void setDocument(Document document) {
+        this.document = document;
     }
 
     public LocalDateTime getCreateDate() {
@@ -86,20 +79,12 @@ public class Document {
         this.createDate = createDate;
     }
 
-    public LocalDateTime getUpdateDate() {
-        return updateDate;
+    public List<DocumentAreaComment> getDocumentAreaComments() {
+        return documentAreaComments;
     }
 
-    public void setUpdateDate(LocalDateTime updateDate) {
-        this.updateDate = updateDate;
-    }
-
-    public List<DocumentArea> getDocumentAreas() {
-        return documentAreas;
-    }
-
-    public void setDocumentAreas(List<DocumentArea> documentAreas) {
-        this.documentAreas = documentAreas;
+    public void setDocumentAreaComments(List<DocumentAreaComment> documentAreaComments) {
+        this.documentAreaComments = documentAreaComments;
     }
 
     public User getUser() {
